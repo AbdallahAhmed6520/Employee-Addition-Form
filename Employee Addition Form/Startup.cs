@@ -1,6 +1,8 @@
+using AutoMapper;
 using Demo.BLL.Interfaces;
 using Demo.BLL.Repositories;
 using Employee_Addition_Form.DAL.Context;
+using Employee_Addition_Form.MappingProfiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +37,9 @@ namespace Employee_Addition_Form
             });
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>(); //Allow Dpendency Injection class EmployeeRepository
+
+            services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
+    
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
