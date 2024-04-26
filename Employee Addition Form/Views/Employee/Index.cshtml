@@ -29,7 +29,7 @@
         <tbody>
             @foreach (var employee in Model)
             {
-                <tr>
+                <tr onclick="location.href = '@Url.Action("Details", "Employee", new { id = employee.Id })'">
                     <td>@employee.Name</td>
                     <td>@employee.JobRole</td>
                     <td>@Html.DisplayFor(E => employee.Gender)</td>
