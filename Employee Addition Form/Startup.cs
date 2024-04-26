@@ -1,3 +1,5 @@
+using Demo.BLL.Interfaces;
+using Demo.BLL.Repositories;
 using Employee_Addition_Form.DAL.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,8 +31,10 @@ namespace Employee_Addition_Form
 
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")); //Allow Dpendency Injection
             });
+
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>(); //Allow Dpendency Injection class EmployeeRepository
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
