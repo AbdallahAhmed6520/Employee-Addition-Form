@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Employee_Addition_Form.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Employee_Addition_Form.DAL.Context
 {
@@ -8,5 +9,6 @@ namespace Employee_Addition_Form.DAL.Context
         {
 
         }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
