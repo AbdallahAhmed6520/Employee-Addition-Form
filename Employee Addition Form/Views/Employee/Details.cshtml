@@ -1,0 +1,55 @@
+﻿@model EmployeeViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1> Employee : @Model.Name Details</h1>
+
+<div class="form-group">
+    <label class="col-form-label" asp-for="Name"></label>
+    <input class="form-control" asp-for="Name" readonly />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label class="col-form-label" asp-for="JobRole"></label>
+    <select class="form-control" asp-for="JobRole" disabled required>
+        <option value="Manager">Manager</option>
+        <option value="Developer">Developer</option>
+        <option value="Designer">Designer</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label class="col-form-label" asp-for="Gender">Gender</label>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" asp-for="Gender" value="Male" disabled />
+        <label class="form-check-label" for="male">Male</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" asp-for="Gender" value="Female" disabled />
+        <label class="form-check-label" for="female">Female</label>
+    </div>
+    <span asp-validation-for="Gender" class="text-danger"></span>
+</div>
+<div class="form-group form-check">
+    <input type="checkbox" class="form-check-input" asp-for="IsFirstAppointment" disabled />
+    <label class="form-check-label" for="isFirstAppointment">First Appointment</label>
+    <span asp-validation-for="IsFirstAppointment" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="StartDate">Start Date</label>
+    <input class="form-control" asp-for="StartDate" type="date" readonly />
+    <span asp-validation-for="StartDate" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="Notes">Notes</label>
+    <textarea class="form-control" asp-for="Notes" readonly></textarea>
+    <span asp-validation-for="Notes" class="text-danger"></span>
+</div>
+
+
+
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+<a asp-action="Index" class="btn btn-light">Back To List</a>

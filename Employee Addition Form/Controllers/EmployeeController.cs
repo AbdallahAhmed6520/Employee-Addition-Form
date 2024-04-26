@@ -43,19 +43,19 @@ namespace Employee_Addition_Form.Controllers
             return View(employeeViewModel);
         }
 
-        //public IActionResult Details(int? id, string viewName = "Details")
-        //{
-        //    if (id is null)
-        //        return BadRequest(); //status code 400
+        public IActionResult Details(int? id, string viewName = "Details")
+        {
+            if (id is null)
+                return BadRequest(); //status code 400
 
-        //    var employee = _employeeRepository.GetById(id.Value);
+            var employee = _employeeRepository.GetById(id.Value);
 
-        //    if (employee is null)
-        //        return NotFound();
+            if (employee is null)
+                return NotFound();
 
-        //    var MappedEmployee = _mapper.Map<Employee, EmployeeViewModel>(employee);
+            var MappedEmployee = _mapper.Map<Employee, EmployeeViewModel>(employee);
 
-        //    return View(viewName, MappedEmployee);
-        //}
+            return View(viewName, MappedEmployee);
+        }
     }
 }
