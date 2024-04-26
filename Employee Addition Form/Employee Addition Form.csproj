@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Employee Addition Form.BLL\Employee Addition Form.BLL.csproj" />
+  </ItemGroup>
+
 </Project>
