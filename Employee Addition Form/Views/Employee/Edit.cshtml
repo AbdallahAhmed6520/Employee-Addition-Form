@@ -1,0 +1,55 @@
+﻿@model EmployeeViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Employee</h1>
+
+<form asp-action="Edit">
+
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Name"></label>
+        <input class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="col-form-label" asp-for="JobRole"></label>
+        <select class="form-control" asp-for="JobRole" required>
+            <option value="Manager">Manager</option>
+            <option value="Developer">Developer</option>
+            <option value="Designer">Designer</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Gender">Gender</label>
+        <div class="form-check form-check-inline">
+            @Html.RadioButtonFor(m => m.Gender, "Male", new { @class = "form-check-input" })
+            <label class="form-check-label" for="male">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+            @Html.RadioButtonFor(m => m.Gender, "Female", new { @class = "form-check-input" })
+            <label class="form-check-label" for="female">Female</label>
+        </div>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+    <div class="form-group form-check">
+        @Html.CheckBoxFor(m => m.IsFirstAppointment)
+        <label class="form-check-label" for="isFirstAppointment">First Appointment</label>
+        <span asp-validation-for="IsFirstAppointment" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="StartDate">Start Date</label>
+        <input class="form-control" asp-for="StartDate" type="date" required />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Notes">Notes</label>
+        @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <input type="submit" value="Update" class="btn btn-primary" />
+    <a asp-action="Index" class="btn btn-light">Back To List</a>
+</form>

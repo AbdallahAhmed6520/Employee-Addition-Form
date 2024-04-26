@@ -43,6 +43,7 @@ namespace Employee_Addition_Form.Controllers
             return View(employeeViewModel);
         }
 
+        [HttpGet]
         public IActionResult Details(int? id, string viewName = "Details")
         {
             if (id is null)
@@ -57,5 +58,38 @@ namespace Employee_Addition_Form.Controllers
 
             return View(viewName, MappedEmployee);
         }
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            return Details(id, "Edit");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(EmployeeViewModel employeeViewModel, [FromRoute] int id)
+        {
+            if (id != employeeViewModel.Id)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
+                    _employeeRepository.Update(MappedEmployee);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+            return View(employeeViewModel);
+        }
+
     }
 }
