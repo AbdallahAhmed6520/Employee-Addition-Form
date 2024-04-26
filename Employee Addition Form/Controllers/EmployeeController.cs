@@ -91,5 +91,33 @@ namespace Employee_Addition_Form.Controllers
             return View(employeeViewModel);
         }
 
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            return Details(id, "Delete");
+        }
+
+        [HttpPost]
+        public IActionResult Delete(EmployeeViewModel employeeViewModel, [FromRoute] int id)
+        {
+            if (id != employeeViewModel.Id)
+            {
+                return BadRequest();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
+                    _employeeRepository.Delete(MappedEmployee);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+            return View(employeeViewModel);
+        }
     }
 }
