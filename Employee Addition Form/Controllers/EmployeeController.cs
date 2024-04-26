@@ -24,5 +24,38 @@ namespace Employee_Addition_Form.Controllers
             var MappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
             return View(MappedEmployees);
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(EmployeeViewModel employeeViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
+                _employeeRepository.Add(MappedEmployee);
+                return RedirectToAction("Index");
+            }
+            return View(employeeViewModel);
+        }
+
+        //public IActionResult Details(int? id, string viewName = "Details")
+        //{
+        //    if (id is null)
+        //        return BadRequest(); //status code 400
+
+        //    var employee = _employeeRepository.GetById(id.Value);
+
+        //    if (employee is null)
+        //        return NotFound();
+
+        //    var MappedEmployee = _mapper.Map<Employee, EmployeeViewModel>(employee);
+
+        //    return View(viewName, MappedEmployee);
+        //}
     }
 }
