@@ -12,6 +12,8 @@ namespace Employee_Addition_Form.BLL.Interfaces
         // Signature For ProPerty For Each and Every Repository Interface
 
         public IEmployeeRepository EmployeeRepository { get; set; }
-        int Complete();
+        Task<int> CompleteAsync();
+
+        void Dispose();
     }
 }

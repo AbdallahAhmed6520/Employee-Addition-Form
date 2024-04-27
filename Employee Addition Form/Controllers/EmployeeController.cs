@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Demo.BLL.Interfaces;
 using Employee_Addition_Form.BLL.Interfaces;
 using Employee_Addition_Form.DAL.Entities;
 using Employee_Addition_Form.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Employee_Addition_Form.Controllers
 {
@@ -19,9 +19,9 @@ namespace Employee_Addition_Form.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var employees = _unitOfWork.EmployeeRepository.GetAll();
+            var employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
             var MappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
             return View(MappedEmployees);
         }
@@ -33,27 +33,27 @@ namespace Employee_Addition_Form.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(EmployeeViewModel employeeViewModel)
+        public async Task<IActionResult> Create(EmployeeViewModel employeeViewModel)
         {
             if (ModelState.IsValid)
             {
                 var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
 
-                _unitOfWork.EmployeeRepository.Add(MappedEmployee);
-                _unitOfWork.Complete(); 
-                
+                await _unitOfWork.EmployeeRepository.AddAsync(MappedEmployee);
+                await _unitOfWork.CompleteAsync();
+
                 return RedirectToAction("Index");
             }
             return View(employeeViewModel);
         }
 
         [HttpGet]
-        public IActionResult Details(int? id, string viewName = "Details")
+        public async Task<IActionResult> Details(int? id, string viewName = "Details")
         {
             if (id is null)
                 return BadRequest(); //status code 400
 
-            var employee = _unitOfWork.EmployeeRepository.GetById(id.Value);
+            var employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(id.Value);
 
             if (employee is null)
                 return NotFound();
@@ -64,7 +64,7 @@ namespace Employee_Addition_Form.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public Task<IActionResult> Edit(int? id)
         {
             return Details(id, "Edit");
         }
@@ -72,7 +72,7 @@ namespace Employee_Addition_Form.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(EmployeeViewModel employeeViewModel, [FromRoute] int id)
+        public async Task<IActionResult> Edit(EmployeeViewModel employeeViewModel, [FromRoute] int id)
         {
             if (id != employeeViewModel.Id)
             {
@@ -86,8 +86,8 @@ namespace Employee_Addition_Form.Controllers
                     var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
 
                     _unitOfWork.EmployeeRepository.Update(MappedEmployee);
-                    _unitOfWork.Complete();
-                    
+                    await _unitOfWork.CompleteAsync();
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
@@ -99,13 +99,13 @@ namespace Employee_Addition_Form.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public Task<IActionResult> Delete(int? id)
         {
             return Details(id, "Delete");
         }
 
         [HttpPost]
-        public IActionResult Delete(EmployeeViewModel employeeViewModel, [FromRoute] int id)
+        public async Task<IActionResult> Delete(EmployeeViewModel employeeViewModel, [FromRoute] int id)
         {
             if (id != employeeViewModel.Id)
             {
@@ -118,8 +118,8 @@ namespace Employee_Addition_Form.Controllers
                     var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
 
                     _unitOfWork.EmployeeRepository.Delete(MappedEmployee);
-                    _unitOfWork.Complete(); 
-                    
+                    await _unitOfWork.CompleteAsync();
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
