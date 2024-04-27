@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Demo.BLL.Interfaces;
 using Employee_Addition_Form.BLL.Interfaces;
 using Employee_Addition_Form.DAL.Entities;
 using Employee_Addition_Form.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Employee_Addition_Form.Controllers
 {
@@ -19,9 +19,9 @@ namespace Employee_Addition_Form.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
+            var employees = _unitOfWork.EmployeeRepository.GetAll();
             var MappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
             return View(MappedEmployees);
         }
@@ -33,24 +33,27 @@ namespace Employee_Addition_Form.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(EmployeeViewModel employeeViewModel)
+        public IActionResult Create(EmployeeViewModel employeeViewModel)
         {
             if (ModelState.IsValid)
             {
                 var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
-                await _unitOfWork.EmployeeRepository.AddAsync(MappedEmployee);
+
+                _unitOfWork.EmployeeRepository.Add(MappedEmployee);
+                _unitOfWork.Complete(); 
+                
                 return RedirectToAction("Index");
             }
             return View(employeeViewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int? id, string viewName = "Details")
+        public IActionResult Details(int? id, string viewName = "Details")
         {
             if (id is null)
                 return BadRequest(); //status code 400
 
-            var employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(id.Value);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id.Value);
 
             if (employee is null)
                 return NotFound();
@@ -61,7 +64,7 @@ namespace Employee_Addition_Form.Controllers
         }
 
         [HttpGet]
-        public Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             return Details(id, "Edit");
         }
@@ -81,7 +84,10 @@ namespace Employee_Addition_Form.Controllers
                 try
                 {
                     var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
+
                     _unitOfWork.EmployeeRepository.Update(MappedEmployee);
+                    _unitOfWork.Complete();
+                    
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
@@ -93,7 +99,7 @@ namespace Employee_Addition_Form.Controllers
         }
 
         [HttpGet]
-        public Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             return Details(id, "Delete");
         }
@@ -110,7 +116,10 @@ namespace Employee_Addition_Form.Controllers
                 try
                 {
                     var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
+
                     _unitOfWork.EmployeeRepository.Delete(MappedEmployee);
+                    _unitOfWork.Complete(); 
+                    
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)

@@ -1,8 +1,9 @@
 ﻿using Demo.BLL.Interfaces;
 using Employee_Addition_Form.DAL.Context;
+using Employee_Addition_Form.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Demo.BLL.Repositories
 {
@@ -14,9 +15,9 @@ namespace Demo.BLL.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task AddAsync(T item)
+        public void Add(T item)
         {
-            await _dbContext.AddAsync(item);
+            _dbContext.Add(item);
         }
 
         public void Delete(T item)
@@ -24,14 +25,14 @@ namespace Demo.BLL.Repositories
             _dbContext.Remove(item);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public IEnumerable<T> GetAll()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return _dbContext.Set<T>().ToList();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public T GetById(int id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return _dbContext.Set<T>().Find(id);
         }
 
         public void Update(T item)

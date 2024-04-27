@@ -2,23 +2,28 @@
 using Demo.BLL.Repositories;
 using Employee_Addition_Form.BLL.Interfaces;
 using Employee_Addition_Form.DAL.Context;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Employee_Addition_Form.BLL.Repositories
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork:IUnitOfWork
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbcontext;
 
         public IEmployeeRepository EmployeeRepository { get; set; }
-
-        public UnitOfWork(AppDbContext context)
+        public UnitOfWork(AppDbContext dbcontext)
         {
-            _context = context;
-            EmployeeRepository = new EmployeeRepository(_context);
+            EmployeeRepository = new EmployeeRepository(dbcontext);
+            _dbcontext = dbcontext;
         }
+
         public int Complete()
         {
-            return _context.SaveChanges();
+            return _dbcontext.SaveChanges();
         }
     }
 }
