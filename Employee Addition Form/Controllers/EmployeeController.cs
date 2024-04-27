@@ -40,8 +40,9 @@ namespace Employee_Addition_Form.Controllers
                 var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
 
                 await _unitOfWork.EmployeeRepository.AddAsync(MappedEmployee);
-                await _unitOfWork.CompleteAsync();
-
+                var result = await _unitOfWork.CompleteAsync();
+                if (result > 0)
+                    TempData["CreateMessage"] = "Employee Is Added Sucessfully";
                 return RedirectToAction("Index");
             }
             return View(employeeViewModel);
@@ -86,7 +87,10 @@ namespace Employee_Addition_Form.Controllers
                     var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
 
                     _unitOfWork.EmployeeRepository.Update(MappedEmployee);
-                    await _unitOfWork.CompleteAsync();
+                    var result = await _unitOfWork.CompleteAsync();
+
+                    if (result > 0)
+                        TempData["UpdateMessage"] = "Employee Is Updated Sucessfully";
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -118,7 +122,10 @@ namespace Employee_Addition_Form.Controllers
                     var MappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employeeViewModel);
 
                     _unitOfWork.EmployeeRepository.Delete(MappedEmployee);
-                    await _unitOfWork.CompleteAsync();
+                    var result = await _unitOfWork.CompleteAsync();
+
+                    if (result > 0)
+                        TempData["DeleteMessage"] = "Employee Is Deleted Sucessfully";
 
                     return RedirectToAction(nameof(Index));
                 }
