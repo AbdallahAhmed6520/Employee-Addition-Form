@@ -1,0 +1,39 @@
+﻿@model IEnumerable<EmployeeViewModel>
+@{
+    ViewData["Title"] = "Options";
+}
+@if (Model.Count() > 0)
+{
+    <br />
+    <h1>Options Menu</h1>
+    <br />
+
+
+    <table class="table table-striped table table-hover mt-3">
+        <thead>
+            <tr>
+                <td>@Html.DisplayNameFor(D => D.Name)</td>
+                <td>Delete</td>
+                <td>Update</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td>@employee.Name</td>
+                    
+                    <td><a class="btn btn-warning" asp-action="Edit" asp-route-id="@employee.Id"><i class="fas fa-edit"></i> Update</a></td>
+                  
+                    <td><a class="btn btn-danger" asp-action="Delete" asp-route-id="@employee.Id"><i class="fas fa-trash"></i> Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="mt-5 alert alert-warning">
+        <h3>There is No employees</h3>
+    </div>
+}

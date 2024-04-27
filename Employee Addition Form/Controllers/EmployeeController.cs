@@ -136,5 +136,12 @@ namespace Employee_Addition_Form.Controllers
             }
             return View(employeeViewModel);
         }
+
+        public async Task<IActionResult> Options()
+        {
+            var employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
+            var MappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+            return View(MappedEmployees);
+        }
     }
 }
